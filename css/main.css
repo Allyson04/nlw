@@ -22,7 +22,36 @@
     font-size: 60%; /* controle das medidas rem */
 }
 
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
 body{
-    background-color: var(--color-primary-darker);
+    height: 100vh;
+}
+
+body{
+    background-color: var(--color-primary-darker); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
  
+body,
+input,
+button,
+textarea{
+    /* font: 500 1.6rem Poppins; */
+    font-weight: 500;
+    font-family: Poppins;
+    font-size: 1.6rem;
+    color: var(--color-text-base)
+}
+
+#container{
+    width: 90vw;
+    max-width: 700px;
+}
