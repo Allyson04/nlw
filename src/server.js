@@ -20,20 +20,82 @@ const proffys = [
     weekday: [1], 
     time_from: [720], 
     time_to: [1220]
+},
+{
+    name: "Marcelo Castro", 
+    avatar: "https://image.shutterstock.com/image-photo/young-male-hipster-traveler-doing-600w-622054616.jpg", 
+    whatsapp: "9 98174567", 
+    bio: "Entusiasta das melhores tecnologias de química avançada.<br><br>Apaixonado por explodir coisas em laboratório e por mudar a vida das pessoas através de experiências. Mais de 200.000 pessoas já passaram por uma das minhas explosões.", 
+    subject: "Química", 
+    cost: "20", 
+    weekday: [1], 
+    time_from: [720], 
+    time_to: [1220]
 }
 ]
 
+const subjects = [
+    "Artes",
+    "Biologia",
+    "Ciências",
+    "Educação física",
+    "Física",
+    "Geografia",
+    "História",
+    "Matemática",
+    "Português",
+    "Química"
+]
+
+const weekdays = [
+    "Domingo",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado"
+]
+
+//Funcionalidades
+
+function getSubject(subjectNumber) {
+    const position = +subjectNumber - 1
+    return subjects[position]
+}
+
+//funcionalidades
 function pageLanding(req, res) {
     return res.render("index.html")
 }
 
 function pageStudy(req, res) {
-    return res.render("study.html", { proffys })
+    const filters = req.query
+    return res.render("study.html", { proffys, filters, subjects, weekdays})
 }
 
 function pageGiveClasses(req, res) {
-    return res.render("give-classes.html")
+    const data = req.query
+
+
+    //se tiver data
+    const isNotEmpty = Object.keys(data).length > 0
+    if(isNotEmpty) {
+        
+        data.subject = getSubject(data.subject)
+
+        //add data ao array proffys
+        proffys.push(data)
+
+        return res.redirect("/study")
+    }
+
+    //se não, mostrar página inicial
+
+    return res.render("give-classes.html", {subjects, weekdays})
 }
+
+//Servidor
 
 const express = require('express')
 const server = express()
@@ -45,6 +107,7 @@ nunjucks.configure('src/views', {
     noCache: true,
 })
 
+//Inicio e configuração do servidor
 server
 
 //configurar arquivos estático (css, scripts, imagens)
@@ -54,4 +117,6 @@ server
 .get("/", pageLanding)
 .get("/study", pageStudy)
 .get("/give-classes", pageGiveClasses)
+
+//start do servidor
 .listen(5500)
